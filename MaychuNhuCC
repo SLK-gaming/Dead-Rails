@@ -1,0 +1,54 @@
+-- Wait for game to load
+repeat wait() until game:IsLoaded()
+
+local lobbyPlaceId = 116495829188952 -- Specify the lobby PlaceId
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local player = Players.LocalPlayer
+
+-- Function to get a low-player server
+local function getLowPlayerServer(cursor)
+    local apiUrl = "https://games.roblox.com/v1/games/" .. lobbyPlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
+    local url = apiUrl .. ((cursor and "&cursor=" .. cursor) or "")
+    local success, response = pcall(function()
+        return game:HttpGet(url)
+    end)
+
+    if success then
+        local data = HttpService:JSONDecode(response)
+        for _, server in pairs(data.data) do
+            if server.playing < 3 and server.id ~= game.JobId then -- Join server with fewer players
+                return server.id
+            end
+        end
+        return data.nextPageCursor
+    end
+
+    warn("Failed to fetch server list.")
+    return nil
+end
+
+-- Main teleportation function
+local function teleportToLowPlayerServer()
+    local serverId, cursor = nil, nil
+    repeat
+        cursor = getLowPlayerServer(cursor)
+        if cursor and not serverId then
+            serverId = cursor
+        end
+    until serverId or not cursor
+
+    if serverId then
+        print("Teleporting to a low-player server...")
+        TeleportService:TeleportToPlaceInstance(lobbyPlaceId, serverId, player)
+    else
+        warn("No suitable server found.")
+    end
+end
+
+-- Repeatedly attempt to teleport
+while true do
+    teleportToLowPlayerServer()
+    wait(5)  -- Wait 5 seconds before attempting again (you can adjust the wait time)
+end
