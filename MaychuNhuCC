@@ -1,4 +1,4 @@
--- Wait for game to load
+-- Like and sub for SLK gaming
 repeat wait() until game:IsLoaded()
 
 local lobbyPlaceId = 116495829188952 -- Specify the lobby PlaceId
