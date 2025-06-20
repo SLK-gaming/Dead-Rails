@@ -14,7 +14,7 @@ local rootPart = character:WaitForChild("HumanoidRootPart")
 -- Define positions for back-and-forth movement
 local pointA = Vector3.new(45, 8, 91)
 local pointB = Vector3.new(45, 8, 154)
-local moveSpeed = 21 -- Normal walking speed
+local moveSpeed = 50 -- Fast walking speed
 
 -- Function to disable collisions (noclip effect)
 local function enableNoClip()
@@ -37,19 +37,23 @@ local function tweenToPosition(targetPosition)
     return tween
 end
 
--- Function to fire the create party remote endlessly (Updated path & args)
+-- Function to fire the create party remote endlessly (Updated path & args, now with isPrivate=true)
 local function fireCreatePartyRemote()
     while true do
         local args = {
             {
-                trainId = "default", -- Required by the new game system
-                maxMembers = 1,      -- Ensures solo party creation
-                gameMode = "Normal"  -- Keeps the correct mode
+                isPrivate = true,      -- Now required for private/solo parties
+                maxMembers = 1,        -- Ensures solo party creation
+                trainId = "default",   -- Required by the new game system
+                gameMode = "Normal"    -- Keeps the correct mode
             }
         }
-
         print("Firing CreateParty remote with args:", args) -- Debugging statement
-        ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Network"):WaitForChild("RemoteEvent"):WaitForChild("CreateParty"):FireServer(unpack(args))
+        ReplicatedStorage:WaitForChild("Shared")
+            :WaitForChild("Network")
+            :WaitForChild("RemoteEvent")
+            :WaitForChild("CreateParty")
+            :FireServer(unpack(args))
         wait(0.1) -- Small delay to prevent crashes
     end
 end
@@ -108,7 +112,7 @@ if game.PlaceId == lobbyPlaceId then
 
     -- Start the delayed teleportation check in parallel
     task.spawn(function()
-        wait(35) -- Wait for 40 seconds
+        wait(35) -- Wait for 35 seconds
 
         if game.PlaceId == lobbyPlaceId then
             local serverId, cursor = nil, nil
