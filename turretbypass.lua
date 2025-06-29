@@ -1,6 +1,3 @@
--- this is very old 
-
-
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
@@ -10,7 +7,6 @@ local root = chr:WaitForChild("HumanoidRootPart")
 local humanoid = chr:WaitForChild("Humanoid")
 
 local teleportPosition = Vector3.new(238, 6, -9096)
-local afterSitTeleportPosition = Vector3.new(54, 3, 29970)
 
 local function getModelCenter(model)
     return model:GetPivot().Position
@@ -71,8 +67,3 @@ for i = 1, 2 do
 end
 
 sitAtMaximGun()
-
-task.wait(1)
-
-root.CFrame = CFrame.new(afterSitTeleportPosition)
-chr:PivotTo(CFrame.new(afterSitTeleportPosition))
