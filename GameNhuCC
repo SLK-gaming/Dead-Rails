@@ -12,8 +12,8 @@ local character = player.Character or player.CharacterAdded:Wait()
 local rootPart = character:WaitForChild("HumanoidRootPart")
 
 -- Define positions for back-and-forth movement
-local pointA = Vector3.new(45, 8, 91)
-local pointB = Vector3.new(45, 8, 154)
+local pointA = Vector3.new(64.6, 7.6, 92.2)
+local pointB = Vector3.new(64.1, 7.6, 153.5)
 local moveSpeed = 50 -- Fast walking speed
 
 -- Function to disable collisions (noclip effect)
