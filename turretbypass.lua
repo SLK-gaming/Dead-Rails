@@ -6,28 +6,15 @@ local chr = plr.Character or plr.CharacterAdded:Wait()
 local root = chr:WaitForChild("HumanoidRootPart")
 local humanoid = chr:WaitForChild("Humanoid")
 
-local teleportPosition = Vector3.new(238, 6, -9096)
-
 local function getModelCenter(model)
     return model:GetPivot().Position
 end
 
 local function sitAtMaximGun()
-    local castle
-    repeat
-        root.CFrame = CFrame.new(teleportPosition)
-        root.Anchored = true
-        RunService.Heartbeat:Wait()
-        castle = workspace:FindFirstChild("VampireCastle")
-    until castle
-
-    local centerPos = getModelCenter(castle)
-    local turretSeat = nil
     local maximGun = nil
+    local turretSeat = nil
 
     repeat
-        root.CFrame = CFrame.new(centerPos)
-        chr:PivotTo(CFrame.new(centerPos))
         RunService.Heartbeat:Wait()
 
         maximGun = workspace:FindFirstChild("RuntimeItems")
@@ -38,15 +25,10 @@ local function sitAtMaximGun()
         end
     until turretSeat
 
-    root.Anchored = false
     local seated = false
 
     while not seated do
         pcall(function()
-            local seatPos = turretSeat.CFrame + Vector3.new(0, 5, 0)
-            root.CFrame = seatPos
-            chr:PivotTo(seatPos)
-
             if humanoid.SeatPart ~= turretSeat then
                 turretSeat:Sit(humanoid)
             else
